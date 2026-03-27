@@ -27,6 +27,11 @@ start() {
     echo "已触发一次打开"
 }
 
+stop() {
+    launchctl unload "$PLIST_DEST"
+    echo "已停止服务"
+}
+
 status() {
     launchctl list | grep com.buaa.open
 }
@@ -41,11 +46,14 @@ case "$1" in
     start)
         start
         ;;
+    stop)
+        stop
+        ;;
     status)
         status
         ;;
     *)
-        echo "用法: $0 {install|uninstall|start|status}"
+        echo "用法: $0 {install|uninstall|start|stop|status}"
         exit 1
         ;;
 esac
