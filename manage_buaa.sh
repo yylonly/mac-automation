@@ -1,8 +1,9 @@
 #!/bin/bash
-# 北航首页自动打开 - 管理脚本
+# 北航教务网站自动打开 - 管理脚本
 
 PLIST_NAME="com.buaa.open.plist"
-PLIST_SOURCE="${BASH_SOURCE[0]%/*}/$PLIST_NAME"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLIST_SOURCE="$SCRIPT_DIR/$PLIST_NAME"
 PLIST_DEST="$HOME/Library/LaunchAgents/$PLIST_NAME"
 
 install() {
