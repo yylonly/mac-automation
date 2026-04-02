@@ -37,6 +37,13 @@ if ! brew list shadowsocks-libev &>/dev/null; then
     echo "shadowsocks-libev installed successfully."
 fi
 
+# Ensure config exists
+CONFIG_PATH="/opt/homebrew/etc/shadowsocks-libev.json"
+if [ ! -f "$CONFIG_PATH" ]; then
+    echo "Config file not found. Running wizard..."
+    "$REPO_DIR/shadowsocks-wizard.sh"
+fi
+
 echo "Installing shadowsocks-libev launchd agent..."
 
 # Debug: print paths
