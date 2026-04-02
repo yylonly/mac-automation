@@ -1,8 +1,32 @@
-# 北航教务网站自动打开
+# mac-automation
+
+自动化脚本集合，包含 BUAA 教务网站自动打开和 Shadowsocks 管理。
+
+## 目录结构
+
+```
+mac-automation/
+├── buaa/                    # 北航教务网站自动化
+│   ├── manage_buaa.sh
+│   ├── open_buaa_every_5min.sh
+│   └── com.buaa.open.plist
+├── shadowsocks/             # Shadowsocks 管理
+│   ├── install-shadowsocks.sh
+│   ├── start-shadowsocks.sh
+│   ├── uninstall-shadowsocks.sh
+│   ├── shadowsocks-autostart.sh
+│   ├── shadowsocks-wizard.sh
+│   └── com.github.yylonly.shadowsocks.plist
+└── README.md
+```
+
+---
+
+## BUAA 教务网站自动打开
 
 每分钟自动打开 `https://kyfw.buaa.edu.cn/`
 
-## 架构关系
+### 架构关系
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -11,7 +35,7 @@
 │                                                             │
 │  方式1: launchd 方案（持久化，开机自启）                      │
 │  ┌──────────────────┐    管理      ┌─────────────────────┐  │
-│  │  manage_buaa.sh  │◄────────────►│ com.buaa.open.plist│  │
+│  │  buaa/manage_buaa.sh │◄────────────►│ buaa/com.buaa.open.plist│  │
 │  │  (管理脚本)       │              │  (launchd配置)      │  │
 │  └──────────────────┘              └─────────┬───────────┘  │
 │                                              │              │
@@ -22,45 +46,42 @@
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  方式2: 手动运行脚本（临时测试用）                           │
-│  ┌──────────────────────────┐                                │
-│  │  open_buaa_every_5min.sh │  (while循环，每分钟open一次)   │
-│  └──────────────────────────┘                                │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│  无关文件:                                                   │
-│  shadowsocks-autostart.sh  ( Shadowsocks 自动启动脚本)       │
+│  ┌──────────────────────────────────┐                       │
+│  │  buaa/open_buaa_every_5min.sh   │  (while循环，每分钟open一次) │
+│  └──────────────────────────────────┘                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 快速开始
+### 快速开始
 
-### 方式一：launchd 服务（推荐）
+#### 方式一：launchd 服务（推荐）
 
 ```bash
+cd buaa
 ./manage_buaa.sh install   # 安装并启动服务
 ./manage_buaa.sh status    # 查看运行状态
 ./manage_buaa.sh start     # 手动触发一次打开
 ./manage_buaa.sh uninstall # 卸载服务
 ```
 
-### 方式二：直接运行脚本
+#### 方式二：直接运行脚本
 
 ```bash
+cd buaa
 chmod +x open_buaa_every_5min.sh
 ./open_buaa_every_5min.sh
 # 按 Ctrl+C 停止
 ```
 
-## 文件说明
+### 文件说明
 
 | 文件 | 说明 |
 |------|------|
-| `manage_buaa.sh` | launchd 服务管理脚本 |
-| `com.buaa.open.plist` | launchd 配置文件 |
-| `open_buaa_every_5min.sh` | 直接运行的脚本（手动方式） |
-| `shadowsocks-autostart.sh` | Shadowsocks 自动启动（与本项目无关） |
+| `buaa/manage_buaa.sh` | launchd 服务管理脚本 |
+| `buaa/com.buaa.open.plist` | launchd 配置文件 |
+| `buaa/open_buaa_every_5min.sh` | 直接运行的脚本（手动方式） |
 
-## 两种方式的区别
+### 两种方式的区别
 
 | | launchd 服务 | 直接运行脚本 |
 |--|---------------|--------------|
@@ -69,3 +90,27 @@ chmod +x open_buaa_every_5min.sh
 | 持久性 | 稳定 | 终端关闭即停止 |
 
 建议使用方式一（launchd）。
+
+---
+
+## Shadowsocks 管理
+
+### 快速开始
+
+```bash
+cd shadowsocks
+./install-shadowsocks.sh    # 安装并启动服务
+./shadowsocks-wizard.sh     # 配置 Shadowsocks
+./uninstall-shadowsocks.sh  # 卸载服务
+```
+
+### 文件说明
+
+| 文件 | 说明 |
+|------|------|
+| `shadowsocks/install-shadowsocks.sh` | 安装脚本（检查 brew、安装 shadowsocks-libev、配置 launchd） |
+| `shadowsocks/start-shadowsocks.sh` | 启动脚本 |
+| `shadowsocks/shadowsocks-autostart.sh` | launchd 启动程序 |
+| `shadowsocks/shadowsocks-wizard.sh` | 配置向导 |
+| `shadowsocks/uninstall-shadowsocks.sh` | 卸载脚本 |
+| `shadowsocks/com.github.yylonly.shadowsocks.plist` | launchd 配置文件 |

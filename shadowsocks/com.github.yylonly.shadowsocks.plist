@@ -7,7 +7,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/yylonly/mac-automation/start-shadowsocks.sh</string>
+        <string>/Users/yylonly/mac-automation/shadowsocks/start-shadowsocks.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
