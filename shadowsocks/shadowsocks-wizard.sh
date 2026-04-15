@@ -50,6 +50,7 @@ cat > "$CONFIG_PATH" << EOF
     "server":"$server",
     "server_port":$server_port,
     "local_port":$local_port,
+    "mode":"tcp_and_udp",
     "password":"$password",
     "timeout":$timeout,
     "method":"$method"
