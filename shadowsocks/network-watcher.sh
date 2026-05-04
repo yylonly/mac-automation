@@ -30,8 +30,14 @@ get_active_interfaces() {
 }
 
 is_vpn_active() {
-    # Check if any VPN interface is active
-    ifconfig 2>/dev/null | grep -E "utun|pptp|ipsec" | grep -q "status: active"
+    # Check if any utun interface has an IP address (VPN connected)
+    # Disconnected VPN leaves utun interfaces but no inet address
+    for iface in $(ifconfig 2>/dev/null | grep -E "^utun[0-9]+:" | sed 's/:.*//'); do
+        if ifconfig "$iface" 2>/dev/null | grep -q "inet "; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 restart_shadowsocks() {
