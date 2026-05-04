@@ -62,4 +62,20 @@ launchctl unload "$PLIST_PATH" 2>/dev/null
 # Load the service
 launchctl load "$PLIST_PATH" && echo "Service loaded." || echo "Failed to load service."
 
-echo "Done. shadowsocks-libev will start automatically at login."
+echo "Installing network watcher for auto-restart on network changes..."
+
+# Ensure logs directory exists
+mkdir -p "$REPO_DIR/logs"
+
+# Copy network watcher plist
+WATCHER_PLIST_NAME="com.github.yylonly.shadowsocks.network-watcher.plist"
+WATCHER_PLIST_PATH="$HOME/Library/LaunchAgents/$WATCHER_PLIST_NAME"
+cp "$REPO_DIR/$WATCHER_PLIST_NAME" "$WATCHER_PLIST_PATH"
+
+# Unload existing watcher if any
+launchctl unload "$WATCHER_PLIST_PATH" 2>/dev/null
+
+# Load the watcher
+launchctl load "$WATCHER_PLIST_PATH" && echo "Network watcher loaded." || echo "Failed to load network watcher."
+
+echo "Done. shadowsocks-libev will start automatically at login and restart on network changes."
