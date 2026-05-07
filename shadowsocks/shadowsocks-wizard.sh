@@ -44,13 +44,25 @@ case ${input:-1} in
     *) method="aes-256-cfb" ;;
 esac
 
+# Mode
+echo "Mode:"
+echo "  1) tcp_only"
+echo "  2) udp_only"
+echo "  3) tcp_and_udp (recommended)"
+read -p "Select mode [3]: " input
+case ${input:-3} in
+    1) mode="tcp_only" ;;
+    2) mode="udp_only" ;;
+    *) mode="tcp_and_udp" ;;
+esac
+
 # Generate JSON
 cat > "$CONFIG_PATH" << EOF
 {
     "server":"$server",
     "server_port":$server_port,
     "local_port":$local_port,
-    "mode":"tcp_and_udp",
+    "mode":"$mode",
     "password":"$password",
     "timeout":$timeout,
     "method":"$method"
